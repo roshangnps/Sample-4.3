@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jaipuriya Kurti Bazaar</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
+body{background:#f3f6fb;color:#1f2937}
+header{
+background:#fff;
+padding:15px 20px;
+box-shadow:0 2px 15px rgba(0,0,0,.05);
+position:sticky;top:0;z-index:1000
+}
+header h1{font-size:20px;font-weight:700;color:#0f172a}
+header p{font-size:12px;color:#64748b}
+.hero{
+background:url('https://i.ibb.co/bg2fV7LN/bg2fV7LN.jpg') center/cover no-repeat;
+height:75vh;display:flex;flex-direction:column;
+justify-content:center;align-items:center;text-align:center;
+color:#fff;padding:20px
+}
+.hero h2{font-size:32px;font-weight:700;text-shadow:0 5px 20px rgba(0,0,0,.6)}
+.hero button{
+margin-top:20px;padding:14px 28px;
+background:#2563eb;color:#fff;border:none;
+border-radius:50px;font-size:16px;
+cursor:pointer;transition:.3s
+}
+.hero button:hover{background:#1e40af}
+
+.container{padding:20px;max-width:1200px;margin:auto}
+
+.search-bar{
+margin-bottom:15px;
+display:flex;
+gap:10px
+}
+.search-bar input{
+flex:1;padding:10px;border-radius:30px;border:1px solid #d1d5db
+}
+
+.filters{text-align:center;margin-bottom:20px}
+.filters button{
+padding:8px 15px;margin:5px;
+border:none;border-radius:20px;
+background:#e2e8f0;cursor:pointer;
+transition:.3s;font-size:13px
+}
+.filters button.active,.filters button:hover{
+background:#2563eb;color:#fff
+}
+
+.products{
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(170px,1fr));
+gap:18px
+}
+
+.card{
+background:#fff;
+border-radius:20px;
+box-shadow:0 8px 25px rgba(0,0,0,.05);
+overflow:hidden;
+transition:.3s;
+display:flex;
+flex-direction:column;
+position:relative
+}
+.card:hover{transform:translateY(-6px)}
+.carousel{
+position:relative;
+width:100%;height:200px;
+overflow:hidden
+}
+.carousel img{
+width:100%;height:200px;
+object-fit:cover;
+position:absolute;
+opacity:0;
+transition:opacity .5s
+}
+.carousel img.active{opacity:1}
+
+.card-body{padding:12px;flex:1;display:flex;flex-direction:column}
+.card h3{font-size:14px;font-weight:600;margin-bottom:4px}
+.card p{font-size:12px;color:#64748b;margin-bottom:6px}
+.price{font-weight:600;margin-bottom:6px}
+.stock{font-size:11px;margin-bottom:6px}
+.add-btn{
+margin-top:auto;padding:8px;
+background:#2563eb;color:#fff;
+border:none;border-radius:8px;
+cursor:pointer;transition:.3s
+}
+.add-btn:hover{background:#1e40af}
+
+.cart-toggle{
+position:fixed;
+bottom:20px;right:20px;
+background:#2563eb;color:#fff;
+width:60px;height:60px;
+border-radius:50%;
+display:flex;align-items:center;
+justify-content:center;
+font-size:22px;cursor:pointer;
+box-shadow:0 10px 30px rgba(0,0,0,.2)
+}
+.cart-count{
+position:absolute;top:-5px;right:-5px;
+background:red;color:#fff;
+width:20px;height:20px;
+border-radius:50%;
+font-size:12px;
+display:flex;align-items:center;
+justify-content:center
+}
+
+.cart{
+position:fixed;
+top:0;right:-100%;
+width:100%;max-width:400px;
+height:100%;
+background:#fff;
+box-shadow:-5px 0 25px rgba(0,0,0,.1);
+transition:.4s;
+padding:20px;
+overflow:auto;z-index:2000
+}
+.cart.open{right:0}
+.cart h2{margin-bottom:10px}
+.cart-item{
+display:flex;justify-content:space-between;
+margin-bottom:10px;font-size:13px
+}
+.cart-item button{
+padding:3px 8px;margin:0 3px
+}
+.total{font-weight:700;margin-top:10px}
+
+.checkout{
+margin-top:15px
+}
+.checkout input,.checkout textarea{
+width:100%;padding:8px;
+margin:6px 0;border:1px solid #ddd;border-radius:8px
+}
+.checkout button{
+background:#2563eb;color:#fff;
+border:none;padding:10px;
+border-radius:8px;width:100%
+}
+
+.success{
+margin-top:10px;
+color:green;font-weight:600;font-size:13px
+}
+
+.whatsapp{
+position:fixed;
+bottom:95px;right:20px;
+background:#25D366;
+color:#fff;padding:12px 18px;
+border-radius:30px;
+text-decoration:none;
+font-weight:600
+}
+
+@media(min-width:768px){
+.hero h2{font-size:42px}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>Jaipuriya Kurti Bazaar</h1>
+<p>Old City Vibes, Delivered to Your Door</p>
+</header>
+
+<section class="hero">
+<h2>Shop the Best from Bapu Bazaar</h2>
+<button onclick="scrollToProducts()">Shop Now</button>
+</section>
+
+<div class="container" id="products-section">
+
+<div class="search-bar">
+<input type="text" id="searchInput" placeholder="Search products...">
+</div>
+
+<div class="filters">
+<button class="active" onclick="filterProducts('All',event)">All</button>
+<button onclick="filterProducts('Gifts',event)">Gifts</button>
+<button onclick="filterProducts('Kurti',event)">Kurti</button>
+<button onclick="filterProducts('Bangles',event)">Bangles</button>
+</div>
+
+<div class="products" id="product-list"></div>
+</div>
+
+<div class="cart-toggle" onclick="toggleCart()">
+🛒
+<div class="cart-count" id="cart-count">0</div>
+</div>
+
+<a href="https://wa.link/yl33oz" class="whatsapp" target="_blank">Chat on WhatsApp</a>
+
+<div class="cart" id="cart">
+<h2>Your Cart</h2>
+<div id="cart-items"></div>
+<div class="total" id="cart-total"></div>
+
+<div class="checkout">
+<form action="https://formspree.io/f/xqedoqad" method="POST" onsubmit="prepareOrder(event)">
+<input type="hidden" name="orderDetails" id="orderDetails">
+<input type="text" name="Customer Name" placeholder="Your Name" required>
+<input type="tel" name="Phone Number" placeholder="Phone Number" required>
+<textarea name="Delivery Address" placeholder="Delivery Address" required></textarea>
+<textarea name="Special Instructions" placeholder="Any Special Instructions"></textarea>
+<button type="submit">Place Order</button>
+</form>
+<div class="success" id="success-msg"></div>
+</div>
+</div>
+
+<script>
+const products=[
+{name:"Name Wallet",price:299,category:"Gifts",stock:10,
+images:["https://i.ibb.co/MyTFZ6DL/MyTFZ6DL.jpg"],
+desc:"Customized Name wallet"},
+{name:"Wireless HP Mouse",price:359,category:"Gifts",stock:8,
+images:["https://i.ibb.co/b5tHdF7s/b5tHdF7s.jpg"],
+desc:"Premium Mouse"},
+{name:"Bellavita Vanilla Unisex Perfume",price:459,category:"Gifts",stock:6,
+images:["https://i.ibb.co/zHD1p1W7/zHD1p1W7.jpg"],
+desc:"Long Lasting Perfume"},
+{name:"Fastrack Watch",price:759,category:"Gifts",stock:5,
+images:["https://i.ibb.co/Nd7tDKbK/Nd7tDKbK.jpg"],
+desc:"Premium Watch"},
+{name:"Anarkali Kurti",price:759,category:"Kurti",stock:7,
+images:["https://i.ibb.co/Q7kdZ1mG/Q7kdZ1mG.jpg"],
+desc:"Yellow Kurti for Haldi/Puja"},
+{name:"Lac Bangle",price:249,category:"Bangles",stock:12,
+images:["https://i.ibb.co/ksJ8pCr1/ksJ8pCr1.jpg"],
+desc:"Traditional lac ki chudiyaan"}
+];
+
+let cart=JSON.parse(localStorage.getItem("cart"))||[];
+
+function renderProducts(list){
+const container=document.getElementById("product-list");
+container.innerHTML="";
+list.forEach((p,i)=>{
+container.innerHTML+=`
+<div class="card">
+<div class="carousel" id="carousel-${i}">
+${p.images.map((img,index)=>`
+<img src="${img}" loading="lazy" class="${index===0?'active':''}">
+`).join('')}
+</div>
+<div class="card-body">
+<h3>${p.name}</h3>
+<p>${p.desc}</p>
+<div class="price">₹ ${p.price}</div>
+<div class="stock">${p.stock>0?`In Stock: ${p.stock}`:`Out of Stock`}</div>
+<button class="add-btn" onclick="addToCart(${i})" ${p.stock<=0?'disabled':''}>Add to Cart</button>
+</div>
+</div>`;
+});
+startCarousel();
+}
+
+function startCarousel(){
+document.querySelectorAll(".carousel").forEach(carousel=>{
+let imgs=carousel.querySelectorAll("img");
+let index=0;
+if(imgs.length>1){
+setInterval(()=>{
+imgs[index].classList.remove("active");
+index=(index+1)%imgs.length;
+imgs[index].classList.add("active");
+},3000);
+}
+});
+}
+
+function filterProducts(cat,e){
+document.querySelectorAll(".filters button").forEach(btn=>btn.classList.remove("active"));
+e.target.classList.add("active");
+if(cat==="All") renderProducts(products);
+else renderProducts(products.filter(p=>p.category===cat));
+}
+
+document.getElementById("searchInput").addEventListener("input",function(){
+const value=this.value.toLowerCase();
+renderProducts(products.filter(p=>p.name.toLowerCase().includes(value)));
+});
+
+function addToCart(i){
+const item=products[i];
+if(item.stock<=0) return;
+item.stock--;
+const existing=cart.find(p=>p.name===item.name);
+if(existing) existing.qty++;
+else cart.push({...item,qty:1});
+localStorage.setItem("cart",JSON.stringify(cart));
+updateCartCount();
+renderProducts(products);
+}
+
+function updateCartCount(){
+document.getElementById("cart-count").innerText=
+cart.reduce((sum,i)=>sum+i.qty,0);
+}
+
+function toggleCart(){
+document.getElementById("cart").classList.toggle("open");
+renderCart();
+}
+
+function renderCart(){
+const items=document.getElementById("cart-items");
+items.innerHTML="";
+let total=0;
+cart.forEach((item,i)=>{
+total+=item.price*item.qty;
+items.innerHTML+=`
+<div class="cart-item">
+<div>${item.name}<br>₹ ${item.price} x ${item.qty}</div>
+<div>
+<button onclick="changeQty(${i},-1)">-</button>
+<button onclick="changeQty(${i},1)">+</button>
+</div>
+</div>`;
+});
+document.getElementById("cart-total").innerText="Grand Total: ₹ "+total;
+}
+
+function changeQty(i,delta){
+cart[i].qty+=delta;
+if(cart[i].qty<=0) cart.splice(i,1);
+localStorage.setItem("cart",JSON.stringify(cart));
+updateCartCount();
+renderCart();
+}
+
+function prepareOrder(e){
+e.preventDefault();
+let summary="Order from Jaipuriya Kurti Bazaar\n\n";
+let total=0;
+cart.forEach(item=>{
+summary+=`${item.name} - Qty: ${item.qty} - ₹ ${item.price*item.qty}\n`;
+total+=item.price*item.qty;
+});
+summary+="\nGrand Total: ₹ "+total;
+document.getElementById("orderDetails").value=summary;
+
+fetch(e.target.action,{
+method:"POST",
+body:new FormData(e.target),
+headers:{'Accept':'application/json'}
+}).then(()=>{
+localStorage.removeItem("cart");
+cart=[];
+updateCartCount();
+renderCart();
+document.getElementById("success-msg").innerHTML=
+"Order placed successfully! We will contact you on WhatsApp.<br><a href='https://wa.link/yl33oz' target='_blank'>Click here to chat</a>";
+});
+}
+
+function scrollToProducts(){
+document.getElementById("products-section").scrollIntoView({behavior:"smooth"});
+}
+
+renderProducts(products);
+updateCartCount();
+</script>
+
+</body>
+</html>
